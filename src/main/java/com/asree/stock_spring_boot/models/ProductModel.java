@@ -13,7 +13,7 @@ public class ProductModel {
     @Column(name = "id")
     private String id;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
     @Column(name = "image")
@@ -34,17 +34,41 @@ public class ProductModel {
     @Column(name = "update_data")
     private LocalDateTime updateData;
 
-    public String getDetail() {
-        return detail;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserModel user; // ความสัมพันธ์กับ UserModel
+
+    public UserModel getUser() {
+        return user;
     }
 
-    public void setDetail(String detail) {
-        this.detail = detail;
+    public void setUser(UserModel user) {
+        this.user = user;
     }
 
     public ProductModel() {
         this.createData = LocalDateTime.now();
         this.updateData = LocalDateTime.now();
+    }
+
+    public ProductModel(String name, int count, double price, String image, UserModel user) {
+        this.name = name;
+        this.count = count;
+        this.price = price;
+        this.image = image;
+        this.user = user; // ตั้งค่าผู้ใช้
+        this.createData = LocalDateTime.now();
+        this.updateData = LocalDateTime.now();
+    }
+
+    // getter and setter สำหรับ user
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -57,14 +81,6 @@ public class ProductModel {
 
     public String getImage() {
         return image;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public void setImage(String image) {
@@ -87,16 +103,21 @@ public class ProductModel {
         this.price = price;
     }
 
-    public ProductModel(String name, int count, double price, String image) {
-        this.name = name;
-        this.count = count;
-        this.price = price;
-        this.image = image;
-        this.createData = LocalDateTime.now();
-        this.updateData = LocalDateTime.now();
+    public String getDetail() {
+        return detail;
     }
 
-    // setter and getter ...
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    public LocalDateTime getCreateData() {
+        return createData;
+    }
+
+    public LocalDateTime getUpdateData() {
+        return updateData;
+    }
 
     public void updateProduct(String name, int count, double price, String image) {
         this.name = name;
@@ -108,14 +129,16 @@ public class ProductModel {
 
     @Override
     public String toString() {
-        return "EProduct{" +
+        return "ProductModel{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
+                ", image='" + image + '\'' +
                 ", count=" + count +
                 ", price=" + price +
-                ", image=" + image +
+                ", detail='" + detail + '\'' +
                 ", createData=" + createData +
                 ", updateData=" + updateData +
+                ", user=" + user +
                 '}';
     }
 }

@@ -13,7 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @RestController
-@RequestMapping("api/upload")
+@RequestMapping("/api/upload")
 public class UploadImageController {
     private final String dirFile = new Enviroments().getBaseDir();
 

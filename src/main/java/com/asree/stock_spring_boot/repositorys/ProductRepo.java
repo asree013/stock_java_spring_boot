@@ -23,6 +23,9 @@ public class ProductRepo implements BaseRepoInterface<ProductModel> {
     @Override
     public ProductModel repoCreate(ProductModel data) {
         try {
+            if (data.getUser() == null) {
+                throw new IllegalArgumentException("User must not be null");
+            }
             entityManager.persist(data);
             return data;
         } catch (Exception e) {
@@ -30,6 +33,7 @@ public class ProductRepo implements BaseRepoInterface<ProductModel> {
         }
     }
 
+    @Transactional
     @Override
     public ProductModel repoUpdate(String id, ProductModel data) {
         try {
@@ -58,12 +62,10 @@ public class ProductRepo implements BaseRepoInterface<ProductModel> {
     @Override
     public List<ProductModel> repoFindAll(int page, int limit) {
         try {
+            TypedQuery<ProductModel> result = entityManager.createQuery("From ProductModel", ProductModel.class);
 
-            TypedQuery<ProductModel> result = entityManager.createQuery("FROM ProductModel", ProductModel.class);
-
-            result.setFirstResult(page * limit);
-            result.setMaxResults(page);
-
+            result.setFirstResult((page - 1) * limit);
+            result.setMaxResults(limit);
             return result.getResultList();
         } catch (Exception e) {
             throw new RuntimeException("Error fetching ProductModel list", e);

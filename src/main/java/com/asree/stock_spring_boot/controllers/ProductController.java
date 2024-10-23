@@ -2,7 +2,10 @@ package com.asree.stock_spring_boot.controllers;
 
 import com.asree.stock_spring_boot.interfaces.BaseControllerInterface;
 import com.asree.stock_spring_boot.models.ProductModel;
+import com.asree.stock_spring_boot.models.UserModel;
 import com.asree.stock_spring_boot.services.ProductService;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +21,7 @@ public class ProductController implements BaseControllerInterface<ProductModel> 
         this.service = productService;
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     @Override
     public List<ProductModel> handlerGetAll(@RequestParam int page, @RequestParam int limit) {
         return this.service.repoFindAll(page, limit);
@@ -30,10 +33,10 @@ public class ProductController implements BaseControllerInterface<ProductModel> 
         return this.service.repoFindById(id);
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     @Override
     public ProductModel handlerCreate(@RequestBody ProductModel data) {
-        return null;
+        return this.service.repoCreate(data);
     }
 
     @PutMapping("{id}")
@@ -48,6 +51,8 @@ public class ProductController implements BaseControllerInterface<ProductModel> 
         return this.service.repoSearch(data);
     }
 
-
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserModel user;
 
 }
