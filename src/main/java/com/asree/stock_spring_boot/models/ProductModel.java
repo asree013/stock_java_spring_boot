@@ -3,6 +3,7 @@ package com.asree.stock_spring_boot.models;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "product")
@@ -33,6 +34,10 @@ public class ProductModel {
 
     @Column(name = "update_data")
     private LocalDateTime updateData;
+
+    @OneToMany(mappedBy = "product")
+    private List<OrderModel> orders; // เปลี่ยนชื่อให้ชัดเจน
+
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

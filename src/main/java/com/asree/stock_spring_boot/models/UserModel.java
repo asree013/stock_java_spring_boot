@@ -35,6 +35,9 @@ public class UserModel {
     @Column(name = "career", nullable = true)
     private String career;
 
+    @Column(name = "image", nullable = true)
+    private String image;
+
     @Column(name = "create_data", updatable = false, nullable = true)
     private LocalDateTime createDate;
 

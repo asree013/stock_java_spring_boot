@@ -1,4 +1,4 @@
-package com.asree.stock_spring_boot.interfaces;
+package com.asree.stock_spring_boot.base;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.asree.stock_spring_boot.repositorys;
 
-import com.asree.stock_spring_boot.interfaces.BaseRepoInterface;
+import com.asree.stock_spring_boot.base.BaseRepoInterface;
 import com.asree.stock_spring_boot.models.ProductModel;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class ProductRepo implements BaseRepoInterface<ProductModel> {
+public class ProductRepo implements BaseRepoInterface<ProductModel>  {
     private EntityManager entityManager;
 
     @Autowired
@@ -23,9 +23,6 @@ public class ProductRepo implements BaseRepoInterface<ProductModel> {
     @Override
     public ProductModel repoCreate(ProductModel data) {
         try {
-            if (data.getUser() == null) {
-                throw new IllegalArgumentException("User must not be null");
-            }
             entityManager.persist(data);
             return data;
         } catch (Exception e) {

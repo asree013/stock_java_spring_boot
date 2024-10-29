@@ -1,14 +1,16 @@
 package com.asree.stock_spring_boot.repositorys;
 
-import com.asree.stock_spring_boot.interfaces.BaseRepoInterface;
+import com.asree.stock_spring_boot.base.BaseRepoInterface;
 import com.asree.stock_spring_boot.models.UserModel;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class UserRepo implements BaseRepoInterface<UserModel> {
     private EntityManager entityManager;
 
@@ -65,18 +67,28 @@ public class UserRepo implements BaseRepoInterface<UserModel> {
 
     @Override
     public List<UserModel> repoSearch(UserModel data) {
-        try{
+        try {
             StringBuilder queryString = new StringBuilder("SELECT p FROM UserModel p WHERE 1=1");
-            if(data.getFirstName() != null) queryString.append("AND p.first_name LINE :first_name");
-            if(data.getLastName() != null) queryString.append("AND p.last_name LIKE :last_name");
-            if(data.getPhone() != null) queryString.append("AND p.phone LIKE :phone");
+            if (data.getFirstName() != null) queryString.append("AND p.first_name LINE :first_name");
+            if (data.getLastName() != null) queryString.append("AND p.last_name LIKE :last_name");
+            if (data.getPhone() != null) queryString.append("AND p.phone LIKE :phone");
 
             TypedQuery<UserModel> newQuery = entityManager.createQuery(queryString.toString(), UserModel.class);
-            if(data.getFirstName() != null) newQuery.setParameter("first_name", "%" + data.getFirstName() + "%");
-            if(data.getLastName() != null) newQuery.setParameter("last_name", "%" + data.getLastName() + "%");
-            if(data.getPhone() != null) newQuery.setParameter("phone", "%" + data.getPhone() + "%");
+            if (data.getFirstName() != null) newQuery.setParameter("first_name", "%" + data.getFirstName() + "%");
+            if (data.getLastName() != null) newQuery.setParameter("last_name", "%" + data.getLastName() + "%");
+            if (data.getPhone() != null) newQuery.setParameter("phone", "%" + data.getPhone() + "%");
 
             return newQuery.getResultList();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public UserModel repoFindByEmail(String email) {
+        try {
+            TypedQuery<UserModel> query = entityManager.createQuery("FROM UserModel u WHERE u.email = :email", UserModel.class);
+            query.setParameter("email", email);
+            return query.getSingleResult();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
