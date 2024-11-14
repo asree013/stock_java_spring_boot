@@ -60,4 +60,18 @@ public class PaymentRepo implements BaseRepoInterface<PaymentModel> {
     public List<PaymentModel> repoSearch(PaymentModel data) {
         return List.of();
     }
+
+    @Override
+    public PaymentModel repoDelete(String id) {
+       try {
+           PaymentModel payMent = repoFindById(id);
+           if(payMent == null) {
+               return null;
+           }
+           entityManager.remove(id);
+           return payMent;
+       } catch (Exception e) {
+           throw new RuntimeException(e);
+       }
+    }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
+@Transactional
 public class UserRepo implements BaseRepoInterface<UserModel> {
     private EntityManager entityManager;
 
@@ -20,7 +21,7 @@ public class UserRepo implements BaseRepoInterface<UserModel> {
 
     }
 
-    @Transactional
+
     @Override
     public UserModel repoCreate(UserModel data) {
         try {
@@ -31,7 +32,6 @@ public class UserRepo implements BaseRepoInterface<UserModel> {
         }
     }
 
-    @Transactional
     @Override
     public UserModel repoUpdate(String id, UserModel data) {
         try {
@@ -49,16 +49,17 @@ public class UserRepo implements BaseRepoInterface<UserModel> {
         try {
             return entityManager.find(UserModel.class, id);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e); // ขว้าง RuntimeException หากมีข้อผิดพลาด
         }
     }
+
 
     @Override
     public List<UserModel> repoFindAll(int page, int limit) {
         try {
             TypedQuery<UserModel> result = entityManager.createQuery("From UserModel", UserModel.class);
-//            result.setFirstResult((page - 1) * limit);
-//            result.setMaxResults(limit);
+            result.setFirstResult((page - 1) * limit);
+            result.setMaxResults(limit);
             return result.getResultList();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -79,6 +80,20 @@ public class UserRepo implements BaseRepoInterface<UserModel> {
             if (data.getPhone() != null) newQuery.setParameter("phone", "%" + data.getPhone() + "%");
 
             return newQuery.getResultList();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public UserModel repoDelete(String id) {
+        try {
+            UserModel user = repoFindById(id);
+            if (user == null) {
+                return null;
+            }
+            entityManager.remove(user);
+            return user;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

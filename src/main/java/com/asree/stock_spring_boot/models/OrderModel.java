@@ -1,7 +1,6 @@
 package com.asree.stock_spring_boot.models;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,14 +12,17 @@ public class OrderModel {
     @Column(name = "id")
     private String id;
 
-    @Column(name = "type", nullable = false)
+    @Column(name = "type", nullable = true)
     private String type;
 
     @Column(name = "detail", nullable = true)
     private String detail;
 
-    @Column(name = "status")
+    @Column(name = "status", nullable = true)
     private String status;
+
+    @Column(name = "total_price", nullable = true)
+    private double totalPrice;
 
     @Column(name = "create_data", nullable = false, updatable = false)
     private LocalDateTime createData;
@@ -28,13 +30,37 @@ public class OrderModel {
     @Column(name = "update_data")
     private LocalDateTime updateData;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id") // ใช้ product_id เป็น FK
-    private ProductModel product; // เปลี่ยนจาก List<ProductModel> เป็น ProductModel
+    @ManyToMany
+    @JoinTable(
+            name = "product_list",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<ProductModel> products;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "payment_id")
-    private PaymentModel payment;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "payment_id", nullable = false)
+    private PaymentModel payments;
+
+    // Constructor
+
+
+    public OrderModel() {
+        this.createData = LocalDateTime.now();
+        this.updateData = LocalDateTime.now();
+    }
+
+    public OrderModel(String id,String type, String detail, String status, double totalPrice, LocalDateTime createData, LocalDateTime updateData, List<ProductModel> products, PaymentModel payment) {
+        this.id = id;
+        this.type = type;
+        this.detail = detail;
+        this.status = status;
+        this.totalPrice = totalPrice;
+        this.createData = createData;
+        this.updateData = updateData;
+        this.products = products;
+//        this.payment = payment;
+    }
 
     // Getter และ Setter
     public String getId() {
@@ -43,6 +69,14 @@ public class OrderModel {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public String getType() {
@@ -85,20 +119,20 @@ public class OrderModel {
         this.updateData = updateData;
     }
 
-    public ProductModel getProduct() {
-        return product;
+    public List<ProductModel> getProducts() {
+        return products;
     }
 
-    public void setProduct(ProductModel product) {
-        this.product = product;
+    public void setProducts(List<ProductModel> products) {
+        this.products = products;
     }
 
     public PaymentModel getPayment() {
-        return payment;
+        return payments;
     }
 
     public void setPayment(PaymentModel payment) {
-        this.payment = payment;
+        this.payments = payment;
     }
 
     @Override
@@ -110,24 +144,9 @@ public class OrderModel {
                 ", status='" + status + '\'' +
                 ", createData=" + createData +
                 ", updateData=" + updateData +
-                ", product=" + product + // เปลี่ยนจาก productList เป็น product
-                ", payment=" + payment +
+                ", products=" + products +
+                ", totalPrice=" + totalPrice +
+                ", payment=" + payments +
                 '}';
     }
-
-    public OrderModel() {
-        this.createData = LocalDateTime.now();
-        this.updateData = LocalDateTime.now();
-    }
-
-    public OrderModel(String type, String detail, String status, ProductModel product, PaymentModel payment) {
-        this.type = type;
-        this.detail = detail;
-        this.status = status;
-        this.createData = LocalDateTime.now();
-        this.updateData = LocalDateTime.now();
-        this.product = product; // เปลี่ยนจาก productList เป็น product
-        this.payment = payment;
-    }
 }
-

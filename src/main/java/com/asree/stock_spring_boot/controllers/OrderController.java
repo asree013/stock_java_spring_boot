@@ -5,12 +5,13 @@ import com.asree.stock_spring_boot.models.OrderModel;
 import com.asree.stock_spring_boot.repositorys.OrderRepo;
 import com.asree.stock_spring_boot.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/order")
+@RequestMapping("api/orders")
 public class OrderController implements BaseControllerInterface<OrderModel> {
     private OrderService service;
 
@@ -19,7 +20,7 @@ public class OrderController implements BaseControllerInterface<OrderModel> {
         this.service = service;
     }
 
-    @GetMapping("")
+    @GetMapping()
     @Override
     public List<OrderModel> handlerGetAll(@RequestParam int page, @RequestParam int limit) {
         return this.service.repoFindAll(page, limit);
@@ -30,10 +31,13 @@ public class OrderController implements BaseControllerInterface<OrderModel> {
         return this.service.repoFindById(id);
     }
 
+    @PostMapping
     @Override
-    public OrderModel handlerCreate(OrderModel data) {
+    public OrderModel handlerCreate(@RequestBody OrderModel data) {
+        System.out.println(data);
         return this.service.repoCreate(data);
     }
+
 
     @Override
     public OrderModel handlerUpdate(String id, OrderModel data) {

@@ -31,9 +31,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/user/sign_in").permitAll() // อนุญาตเข้าถึง sign_in
-                        .requestMatchers("/api/user/**").permitAll() // อนุญาตเข้าถึงเส้นทางอื่นใน user
-                        .anyRequest().authenticated() // ป้องกันทุกคำขออื่น
+                        .requestMatchers("/api/product/**").permitAll()
+                        .requestMatchers("/api/user/sign_in").permitAll()
+                        .requestMatchers("/api/user/**").permitAll()
+                        .requestMatchers("/api/orders/**").permitAll()
+                        .requestMatchers("/api/payment/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

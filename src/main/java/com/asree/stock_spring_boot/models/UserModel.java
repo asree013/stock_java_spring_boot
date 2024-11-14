@@ -51,8 +51,9 @@ public class UserModel {
     }
 
 
-    public UserModel(String email, String password, String firstName, String lastName, String idCard, String phone, String career) {
+    public UserModel(String email, String password, String firstName, String lastName, String idCard, String phone, String career, String image) {
         this.email = email;
+        this.image = image;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -65,6 +66,14 @@ public class UserModel {
 
     public String getId() {
         return id;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public void setId(String id) {
@@ -155,6 +164,7 @@ public class UserModel {
                 ", firstName='" + firstName + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", image='" + image + '\'' +
                 ", id='" + id + '\'' +
                 '}';
     }

@@ -22,6 +22,7 @@ public class ProductRepo implements BaseRepoInterface<ProductModel>  {
     @Transactional
     @Override
     public ProductModel repoCreate(ProductModel data) {
+        System.out.println(data);
         try {
             entityManager.persist(data);
             return data;
@@ -105,6 +106,20 @@ public class ProductRepo implements BaseRepoInterface<ProductModel>  {
             return query.getResultList();
         } catch (Exception e) {
             throw new RuntimeException("Error searching for ProductModel", e);
+        }
+    }
+
+    @Override
+    public ProductModel repoDelete(String id) {
+        try {
+           ProductModel product = repoFindById(id);
+           if(product == null){
+              return null;
+           }
+           entityManager.remove(id);
+           return product;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

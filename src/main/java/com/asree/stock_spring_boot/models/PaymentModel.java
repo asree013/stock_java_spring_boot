@@ -1,7 +1,6 @@
 package com.asree.stock_spring_boot.models;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -24,10 +23,20 @@ public class PaymentModel {
     @Column(name = "update_data")
     private LocalDateTime updateData;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_id")
+    @OneToOne
+    @JoinColumn(name = "order_id", nullable = false) // ต้องแน่ใจว่าเป็น not-null
     private OrderModel order;
 
+    // Constructor
+    public PaymentModel(String statusPayment, String typePayment, OrderModel order) {
+        this.statusPayment = statusPayment;
+        this.typePayment = typePayment;
+        this.createData = LocalDateTime.now();
+        this.updateData = LocalDateTime.now();
+        this.order = order; // ตั้งค่าการอ้างอิง order
+    }
+
+    // Getter และ Setter
     public String getId() {
         return id;
     }
@@ -42,6 +51,7 @@ public class PaymentModel {
 
     public void setStatusPayment(String statusPayment) {
         this.statusPayment = statusPayment;
+        this.updateData = LocalDateTime.now(); // อัปเดตเวลาเมื่อมีการเปลี่ยนแปลง
     }
 
     public String getTypePayment() {
@@ -50,6 +60,7 @@ public class PaymentModel {
 
     public void setTypePayment(String typePayment) {
         this.typePayment = typePayment;
+        this.updateData = LocalDateTime.now(); // อัปเดตเวลาเมื่อมีการเปลี่ยนแปลง
     }
 
     public LocalDateTime getCreateData() {
@@ -79,24 +90,13 @@ public class PaymentModel {
     @Override
     public String toString() {
         return "PaymentModel{" +
-                "updateData=" + updateData +
-                ", createData=" + createData +
-                ", typePayment='" + typePayment + '\'' +
+                "id='" + id + '\'' +
                 ", statusPayment='" + statusPayment + '\'' +
-                ", id='" + id + '\'' +
+                ", typePayment='" + typePayment + '\'' +
+                ", createData=" + createData +
+                ", updateData=" + updateData +
+                ", order=" + order.getId() +  // หรือแสดงข้อมูลที่สำคัญของ OrderModel
                 '}';
     }
-
-    public PaymentModel() {
-        this.createData = LocalDateTime.now();
-        this.updateData = LocalDateTime.now();
-    }
-
-    public PaymentModel(String statusPayment, String typePayment, LocalDateTime createData, LocalDateTime updateData, OrderModel order) {
-        this.statusPayment = statusPayment;
-        this.typePayment = typePayment;
-        this.createData = LocalDateTime.now();
-        this.updateData = LocalDateTime.now();
-        this.order = order;
-    }
 }
+

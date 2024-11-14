@@ -1,8 +1,10 @@
 package com.asree.stock_spring_boot.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -35,13 +37,13 @@ public class ProductModel {
     @Column(name = "update_data")
     private LocalDateTime updateData;
 
-    @OneToMany(mappedBy = "product")
-    private List<OrderModel> orders; // เปลี่ยนชื่อให้ชัดเจน
-
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private UserModel user; // ความสัมพันธ์กับ UserModel
+    private UserModel user;
+
+    @ManyToMany(mappedBy = "products")
+    private List<OrderModel> order = new ArrayList<>();
 
     public UserModel getUser() {
         return user;
@@ -55,6 +57,8 @@ public class ProductModel {
         this.createData = LocalDateTime.now();
         this.updateData = LocalDateTime.now();
     }
+
+
 
     public ProductModel(String name, int count, double price, String image, UserModel user) {
         this.name = name;

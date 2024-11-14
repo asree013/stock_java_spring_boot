@@ -27,9 +27,10 @@ public class PaymentController implements BaseControllerInterface<PaymentModel> 
         return null;
     }
 
+    @PostMapping
     @Override
-    public PaymentModel handlerCreate(PaymentModel data) {
-        return null;
+    public PaymentModel handlerCreate(@RequestBody  PaymentModel data) {
+        return this.service.repoCreate(data);
     }
 
     @Override

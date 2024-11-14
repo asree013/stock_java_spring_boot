@@ -25,8 +25,9 @@ public class UserController implements BaseControllerInterface<UserModel> {
         return this.service.repoFindAll(page, limit);
     }
 
+    @GetMapping("{id}")
     @Override
-    public UserModel handlerGetById(String id) {
+    public UserModel handlerGetById(@PathVariable String id) {
         return this.service.repoFindById(id);
     }
 
@@ -36,14 +37,16 @@ public class UserController implements BaseControllerInterface<UserModel> {
         return service.repoCreate(data);
     }
 
+    @PutMapping("{id}")
     @Override
-    public UserModel handlerUpdate(String id, UserModel data) {
-        return null;
+    public UserModel handlerUpdate(@PathVariable String id, @RequestBody UserModel data) {
+        return this.service.repoUpdate(id, data);
     }
 
+    @PostMapping("search")
     @Override
-    public List<UserModel> handlerSearch(UserModel data) {
-        return List.of();
+    public List<UserModel> handlerSearch(@RequestBody UserModel data) {
+        return this.service.repoSearch(data);
     }
 
     @PostMapping("sing_in")
@@ -54,5 +57,12 @@ public class UserController implements BaseControllerInterface<UserModel> {
     @PostMapping("sing_up")
     public UserModel handlerSingUp(@RequestBody UserModel data) {
         return this.service.singUp(data);
+    }
+
+    @DeleteMapping("/{id}")
+    public UserModel handlerDelete(@PathVariable String id) {
+        System.out.println("delete");
+        System.out.println(id);
+        return this.service.repoDelete(id);
     }
 }

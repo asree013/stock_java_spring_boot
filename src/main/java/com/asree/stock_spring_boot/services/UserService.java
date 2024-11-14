@@ -1,5 +1,6 @@
 package com.asree.stock_spring_boot.services;
 
+import com.asree.stock_spring_boot.base.BaseServiceInterface;
 import com.asree.stock_spring_boot.models.UserModel;
 import com.asree.stock_spring_boot.repositorys.UserRepo;
 import com.asree.stock_spring_boot.utils.JwtUtil;
@@ -8,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class UserService extends UserRepo {
+public class UserService extends UserRepo implements BaseServiceInterface<UserModel> {
     @Autowired
     private UserRepo repo;
     @Autowired
@@ -54,4 +57,38 @@ public class UserService extends UserRepo {
         }
     }
 
+    @Override
+    public List<UserModel> findAll(int page, int limit) {
+        return List.of();
+    }
+
+    @Override
+    public UserModel findById(String id) {
+        return null;
+    }
+
+    @Override
+    public UserModel updateById(String id, UserModel data) {
+        return null;
+    }
+
+    @Override
+    public UserModel deleteById(String id) {
+        System.out.println("create");
+        try{
+            return this.repo.repoFindById(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<UserModel> search(UserModel data) {
+        return List.of();
+    }
+
+    @Override
+    public UserModel create(UserModel data) {
+        return null;
+    }
 }

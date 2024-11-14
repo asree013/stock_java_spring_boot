@@ -10,4 +10,5 @@ public interface BaseRepoInterface<T> {
     T repoFindById(String id);
     List<T> repoFindAll(int page, int limit);
     List<T> repoSearch(T data);
+    T repoDelete(String id);
 }

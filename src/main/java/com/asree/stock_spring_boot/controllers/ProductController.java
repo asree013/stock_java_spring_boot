@@ -1,6 +1,7 @@
 package com.asree.stock_spring_boot.controllers;
 
 import com.asree.stock_spring_boot.base.BaseControllerInterface;
+import com.asree.stock_spring_boot.interfaces.product.ProductDTO;
 import com.asree.stock_spring_boot.models.ProductModel;
 import com.asree.stock_spring_boot.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,32 +20,28 @@ public class ProductController implements BaseControllerInterface<ProductModel> 
     }
 
     @GetMapping()
-    @Override
     public List<ProductModel> handlerGetAll(@RequestParam int page, @RequestParam int limit) {
         return this.service.repoFindAll(page, limit);
     }
 
     @GetMapping("{id}")
-    @Override
     public ProductModel handlerGetById(@PathVariable String id) {
         return this.service.repoFindById(id);
     }
 
-    @PostMapping("")
-    @Override
+    @PostMapping()
     public ProductModel handlerCreate(@RequestBody ProductModel data) {
         System.out.println(" ---------- create product");
+        System.out.println(data);
         return this.service.repoCreate(data);
     }
 
     @PutMapping("{id}")
-    @Override
     public ProductModel handlerUpdate(@PathVariable String id, @RequestBody ProductModel data) {
         return this.service.repoUpdate(id, data);
     }
 
     @GetMapping("search")
-    @Override
     public List<ProductModel> handlerSearch(@RequestBody ProductModel data) {
         return this.service.repoSearch(data);
     }
